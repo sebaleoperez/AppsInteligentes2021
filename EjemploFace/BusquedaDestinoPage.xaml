@@ -1,0 +1,37 @@
+﻿<?xml version="1.0" encoding="UTF-8" ?>
+<ContentPage
+    xmlns="http://xamarin.com/schemas/2014/forms"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    x:Class="EjemploFace.BusquedaDestinoPage">
+    <ContentPage.Content>
+
+        <Grid RowDefinitions="Auto,Auto,*,*" Margin="5" RowSpacing="2">
+            <Entry x:Name="entryDestino" Grid.Row="0" Grid.Column="0" />
+            <Button Clicked="Button_Clicked" Text="Buscar"  Grid.Row="1" Grid.Column="0" />
+
+            <ActivityIndicator IsVisible="false" IsRunning="False" x:Name="aiCargaImagenes" Grid.Row="2" Grid.Column="0"  />
+
+            <ProgressBar Progress="0" IsVisible="false" x:Name="pbProgreso" Grid.Row="3" Grid.Column="0" />
+
+            <CarouselView x:Name="cvImagenes"  Grid.Row="2" Grid.Column="0">
+                <CarouselView.ItemTemplate>
+                    <DataTemplate>
+                        <Image Source="{Binding URLImagen}" VerticalOptions="FillAndExpand" HorizontalOptions="FillAndExpand" Aspect="AspectFit" />
+                    </DataTemplate>
+                </CarouselView.ItemTemplate>
+            </CarouselView>
+            <CollectionView x:Name="cvNoticias" Grid.Row="3" Grid.Column="0">
+                <CollectionView.ItemTemplate>
+                    <DataTemplate>
+                        <Grid Margin="5" ColumnDefinitions="2*,*">
+                            <Label Text="{Binding Titulo}"  Grid.Row="0" Grid.Column="0" />
+                            <Image Source="{Binding URLImagen}"  Grid.Row="0" Grid.Column="1" Aspect="AspectFit" />
+                        </Grid>
+                    </DataTemplate>
+                </CollectionView.ItemTemplate>
+            </CollectionView>
+
+        </Grid>
+
+    </ContentPage.Content>
+</ContentPage>

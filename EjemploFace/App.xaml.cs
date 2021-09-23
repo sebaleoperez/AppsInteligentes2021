@@ -10,7 +10,7 @@ namespace EjemploFace
         {
             InitializeComponent();
 
-            MainPage = new VerificacionPage();
+            MainPage = new BusquedaDestinoPage();
         }
 
         protected override void OnStart()
