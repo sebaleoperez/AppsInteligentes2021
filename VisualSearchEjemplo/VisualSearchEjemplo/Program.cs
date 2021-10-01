@@ -1,8 +1,11 @@
 ﻿using System;
 using System.IO;
+using System.Net.Http;
+using System.Text;
 using System.Threading.Tasks;
 using Microsoft.Azure.CognitiveServices.Vision.ComputerVision;
 using Microsoft.Bing.VisualSearch;
+using Newtonsoft.Json;
 
 namespace VisualSearchEjemplo
 {
@@ -38,11 +41,30 @@ namespace VisualSearchEjemplo
 
             var resultadosCV = await clienteCV.DescribeImageInStreamAsync(streamCV);
 
+            // Informacion del cliente http de traduccion
+            string route = "/translate?api-version=3.0&from=en&to=es";
+
             if (resultadosCV.Captions.Count > 0)
             {
                 foreach(var cap in resultadosCV.Captions)
                 {
-                    Console.WriteLine(cap.Text);
+                    object[] body = new object[] { new { Text = cap.Text } };
+                    var requestBody = JsonConvert.SerializeObject(body);
+
+                    using (var client = new HttpClient())
+                    using (var request = new HttpRequestMessage())
+                    {
+                        request.Method = HttpMethod.Post;
+                        request.RequestUri = new Uri("https://api.cognitive.microsofttranslator.com/" + route);
+                        request.Content = new StringContent(requestBody, Encoding.UTF8, "application/json");
+                        request.Headers.Add("Ocp-Apim-Subscription-Key", AppSettings.TranslateKey);
+                        request.Headers.Add("Ocp-Apim-Subscription-Region", "eastus");
+
+                        HttpResponseMessage response = await client.SendAsync(request).ConfigureAwait(false);
+                        string result = await response.Content.ReadAsStringAsync();
+
+                        Console.WriteLine(result);
+                    }
                 }
             }
 
